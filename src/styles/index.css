@@ -1,11 +1,98 @@
-/* 
+body {
+  background-color: #efd8f1;   
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 
-    You can write your own styles here...
-    
-    
-    ...Or you can use the import command to include 
-    other sylesheets into your bunde as well, e.j:
-    
-    import 'relative/path/to/stylesheet.scss';
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
 
-*/
+.todo-app {
+  margin-top: 40px;
+  background: white;
+  padding: 30px 40px;
+  border-radius: 14px;
+  width: 400px;
+
+}
+
+.todo-app h1 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+.todo-form {
+  display: flex;
+  gap: 10px;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+ul {
+  padding: 0;
+  margin-top: 20px;
+
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.todo-item span {
+  font-size: 16px;
+}
+
+.delete-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0;
+}
+
+.todo-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.vacio {
+  color: #ad2828;
+  font-style: italic;
+  text-align: center;
+}
+
+p {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+
+.todo-app button {
+  margin-top: 15px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #080808;
+  background: white;
+  color: #0b0b0b;
+  font-size: 14px;
+}
+
+.todo-app button:hover {
+  background-color: #efd8f1;
+  color: #0b0b0b;
+}
