@@ -9,13 +9,12 @@ const List = ({ tasks, onDeleteTask }) => {
       )}
 
       {tasks.map((t) => (
-  <Item
-    key={t.id}
-    text={t.label}
-    onDelete={() => onDeleteTask(t.id)}
-  />
-))}
-
+        <Item
+          key={t.id}
+          text={t.label}
+          onDelete={() => onDeleteTask(t.id)}
+        />
+      ))}
     </ul>
   );
 };

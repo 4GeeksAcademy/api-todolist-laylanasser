@@ -56,17 +56,22 @@ ul {
   font-size: 16px;
 }
 
-.delete-btn {
+.todo-item .delete-btn {
   border: none;
   background: transparent;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   opacity: 0;
+  padding: 0 6px;
+  width: auto;
+  display: inline-block;
+  margin-left: 8px;
 }
 
 .todo-item:hover .delete-btn {
   opacity: 1;
 }
+
 
 .vacio {
   color: #ad2828;
@@ -96,3 +101,5 @@ p {
   background-color: #efd8f1;
   color: #0b0b0b;
 }
+
+

@@ -2,128 +2,104 @@ import React, { useState, useEffect } from "react";
 import Form from "./Form.jsx";
 import List from "./List.jsx";
 
-const USERNAME = "laylanasser";
-const BASE_URL = "https://playground.4geeks.com/todo";
-
 const Home = () => {
   const [tasks, setTasks] = useState([]);
 
-  // 1) Cargar tareas desde la API (o crear el usuario si no existe)
-  const fetchTasks = async () => {
-    try {
-      const resp = await fetch(`${BASE_URL}/users/${USERNAME}`);
+  const userName = "laylanasser";
+  const urlBase = "https://playground.4geeks.com/todo";
 
-      if (resp.ok) {
-        const data = await resp.json();
+  // Cargar tareas desde el servidor
+  const loadTodos = () => {
+    fetch(`${urlBase}/users/${userName}`)
+      .then(resp => resp.json())
+      .then(data => {
         setTasks(data.todos || []);
-        return;
-      }
-
-      if (resp.status === 404) {
-        await fetch(`${BASE_URL}/users/${USERNAME}`, {
-          method: "POST"
-        });
-        setTasks([]);
-        return;
-      }
-
-      console.log("Error cargando usuario:", resp.status);
-    } catch (error) {
-      console.log("Error de red:", error);
-    }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
-  // Cargar tareas al montar el componente
+  // Al iniciar: crear usuario y luego cargar tareas
   useEffect(() => {
-    fetchTasks();
+    fetch(`${urlBase}/users/${userName}`, {
+      method: "POST"
+    })
+      .then(() => {
+        loadTodos();
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }, []);
 
-  // 2) Añadir tarea (POST a la API)
-  const addTask = async (text) => {
-    if (!text.trim()) return;
+  // Añadir tarea
+  const addTask = (text) => {
+    if (text === "") return;
 
-    const task = {
+    const newTask = {
       label: text,
       is_done: false
     };
 
-    try {
-      const resp = await fetch(`${BASE_URL}/todos/${USERNAME}`, {
-        method: "POST",
-        body: JSON.stringify(task),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-
-      if (!resp.ok) {
-        console.log("Error creando tarea:", resp.status);
-        return;
+    fetch(`${urlBase}/todos/${userName}`, {
+      method: "POST",
+      body: JSON.stringify(newTask),
+      headers: {
+        "Content-Type": "application/json"
       }
-
-      // Una vez creada en el servidor, recargo la lista
-      fetchTasks();
-    } catch (error) {
-      console.log("Error de red al crear tarea:", error);
-    }
+    })
+      .then(resp => resp.json())
+      .then(() => {
+        loadTodos();
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
-  // 3) Borrar UNA tarea (DELETE por id)
-  const deleteTask = async (todoId) => {
-    try {
-      const resp = await fetch(`${BASE_URL}/todos/${todoId}`, {
-        method: "DELETE"
+  // Borrar una tarea
+  const deleteTask = (id) => {
+    fetch(`${urlBase}/todos/${id}`, {
+      method: "DELETE"
+    })
+      .then(resp => resp.json())
+      .then(() => {
+        loadTodos();
+      })
+      .catch(error => {
+        console.log(error);
       });
-
-      if (!resp.ok) {
-        console.log("Error al borrar tarea:", resp.status);
-        return;
-      }
-
-      fetchTasks();
-    } catch (error) {
-      console.log("Error de red al borrar tarea:", error);
-    }
   };
 
-  // 4) Borrar TODAS las tareas (DELETE usuario y recrearlo)
-  const clearAll = async () => {
-    try {
-      const resp = await fetch(`${BASE_URL}/users/${USERNAME}`, {
-        method: "DELETE"
+  // Borrar todas las tareas
+  const clearAll = () => {
+    fetch(`${urlBase}/users/${userName}`, {
+      method: "DELETE"
+    })
+      .then(resp => resp.json())
+      .then(() => {
+        return fetch(`${urlBase}/users/${userName}`, {
+          method: "POST"
+        });
+      })
+      .then(() => {
+        loadTodos();
+      })
+      .catch(error => {
+        console.log(error);
       });
-
-      if (!resp.ok) {
-        console.log("Error borrando todo:", resp.status);
-        return;
-      }
-
-      // volvemos a crear el usuario vacío
-      await fetch(`${BASE_URL}/users/${USERNAME}`, {
-        method: "POST"
-      });
-
-      setTasks([]);
-    } catch (error) {
-      console.log("Error de red al borrar todo:", error);
-    }
   };
 
   return (
     <div className="todo-app">
       <h1>Lista To Do Layla</h1>
-
       <Form onAddTask={addTask} />
-
       <List tasks={tasks} onDeleteTask={deleteTask} />
-
-      <p>
-        {tasks.length === 0
-          ? "No hay tareas"
-          : `${tasks.length} tareas pendientes`}
-      </p>
-
-      <button onClick={clearAll}>Eliminar todas</button>
+      <p>{tasks.length} tareas pendientes</p>
+      <button className="clear-btn" onClick={clearAll}>
+        Borrar todas las tareas
+      </button>
     </div>
   );
 };
