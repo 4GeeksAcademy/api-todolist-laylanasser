@@ -8,7 +8,7 @@ const Home = () => {
   const userName = "laylanasser";
   const urlBase = "https://playground.4geeks.com/todo";
 
-  // Cargar tareas desde el servidor
+  
   const loadTodos = () => {
     fetch(`${urlBase}/users/${userName}`)
       .then(resp => resp.json())
@@ -20,7 +20,7 @@ const Home = () => {
       });
   };
 
-  // Al iniciar: crear usuario y luego cargar tareas
+
   useEffect(() => {
     fetch(`${urlBase}/users/${userName}`, {
       method: "POST"
@@ -33,7 +33,6 @@ const Home = () => {
       });
   }, []);
 
-  // Añadir tarea
   const addTask = (text) => {
     if (text === "") return;
 
@@ -58,7 +57,7 @@ const Home = () => {
       });
   };
 
-  // Borrar una tarea
+
   const deleteTask = (id) => {
     fetch(`${urlBase}/todos/${id}`, {
       method: "DELETE"
@@ -72,7 +71,7 @@ const Home = () => {
       });
   };
 
-  // Borrar todas las tareas
+
   const clearAll = () => {
     fetch(`${urlBase}/users/${userName}`, {
       method: "DELETE"
